@@ -159,7 +159,7 @@ Eigen::Vector3d robust_pbc_displacement_cart(xtal::Lattice const &lattice,
                                              Eigen::Vector3d const &site_cart,
                                              Eigen::Vector3d const &atom_cart) {
   Eigen::Vector3d disp_cart =
-      fast_pbc_displacement_cart(lattice, site_cart, atom_cart);
+      mapping_impl::fast_pbc_displacement_cart(lattice, site_cart, atom_cart);
   if (!(disp_cart.norm() < lattice.inner_voronoi_radius() + lattice.tol())) {
     Eigen::Vector3d lattice_trans;
     while (lattice.max_voronoi_measure(disp_cart, lattice_trans) >
@@ -363,10 +363,11 @@ std::vector<std::vector<Eigen::Vector3d>> make_site_displacements(
 
   for (Index atom_index = 0; atom_index < N_atom; ++atom_index) {
     for (Index site_index = 0; site_index < N_site; ++site_index) {
-      site_displacements[site_index][atom_index] = robust_pbc_displacement_cart(
-          lattice, supercell_site_coordinate_cart.col(site_index),
-          atom_coordinate_cart_in_supercell.col(atom_index) +
-              trial_translation);
+      site_displacements[site_index][atom_index] =
+          mapping_impl::robust_pbc_displacement_cart(
+              lattice, supercell_site_coordinate_cart.col(site_index),
+              atom_coordinate_cart_in_supercell.col(atom_index) +
+                  trial_translation);
     }
   }
   return site_displacements;
