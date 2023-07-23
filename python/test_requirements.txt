@@ -1,5 +1,0 @@
-pytest
-pytest-datadir
-mock
-yapf
-scipy
