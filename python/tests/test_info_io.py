@@ -1,13 +1,13 @@
 import numpy as np
+
+import libcasm.mapping.info as info
 import libcasm.xtal as xtal
 import libcasm.xtal.prims as xtal_prims
 import libcasm.xtal.structures as xtal_structures
 from libcasm.mapping.methods import map_atoms, map_lattices, map_structures
-import libcasm.mapping.info as info
 
 
 def test_structure_mapping_io():
-
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
     prim_factor_group = xtal.make_factor_group(prim)
 
@@ -65,7 +65,6 @@ def test_structure_mapping_io():
 
 
 def test_lattice_and_atom_mapping_io():
-
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
     prim_factor_group = xtal.make_factor_group(prim)
     point_group = xtal.make_crystal_point_group(prim)

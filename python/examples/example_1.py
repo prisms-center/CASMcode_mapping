@@ -1,7 +1,8 @@
+from scipy.spatial.transform import Rotation
+
 import libcasm.mapping.methods as mapmethods
 import libcasm.xtal as xtal
 import libcasm.xtal.prims as xtal_prims
-from scipy.spatial.transform import Rotation
 
 prim = xtal_prims.cubic(a=1.0, occ_dof=["A"])
 print("prim:", prim.to_dict())

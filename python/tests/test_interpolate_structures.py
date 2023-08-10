@@ -1,16 +1,16 @@
 from math import sqrt
+
 import numpy as np
+
 import libcasm.mapping.methods as mapmethods
 import libcasm.xtal as xtal
 import libcasm.xtal.prims as xtal_prims
 import libcasm.xtal.structures as xtal_structures
 
 # testing
-from libcasm.mapping.info import LatticeMapping, StructureMapping
 
 
 def test_interpolate_bcc_fcc_structures():
-
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
     prim_factor_group = xtal.make_factor_group(prim)
 
@@ -85,7 +85,6 @@ def test_interpolate_bcc_fcc_structures():
 
 
 def test_interpolate_bcc_hcp_structures():
-
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
     prim_factor_group = xtal.make_factor_group(prim)
 
@@ -196,7 +195,6 @@ def test_interpolate_bcc_hcp_structures():
 
 
 def test_interpolate_bcc_hcp_poscars():
-
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
     prim_factor_group = xtal.make_factor_group(prim)
 

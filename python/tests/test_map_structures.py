@@ -1,24 +1,27 @@
 import math
+
 import numpy as np
+
 import libcasm.mapping.methods as mapmethods
 import libcasm.xtal as xtal
 import libcasm.xtal.prims as xtal_prims
 import libcasm.xtal.structures as xtal_structures
-from scipy.spatial.transform import Rotation
 
 
 def check_mapping(prim, structure, structure_mapping):
-
     # print("structure:")
-    # print("lattice_column_vector_matrix:\n", structure.lattice().column_vector_matrix())
+    # print("lattice_column_vector_matrix:\n",
+    #       structure.lattice().column_vector_matrix())
     # print("atom_coordinate_frac:\n", structure.atom_coordinate_frac().transpose())
     # print("atom_type:", structure.atom_type())
 
     mapped_structure = mapmethods.make_mapped_structure(structure_mapping, structure)
     mapped_structure_atom_type = mapped_structure.atom_type()
     # print("mapped_structure:")
-    # print("lattice_column_vector_matrix:\n", mapped_structure.lattice().column_vector_matrix())
-    # print("atom_coordinate_frac:\n", mapped_structure.atom_coordinate_frac().transpose())
+    # print("lattice_column_vector_matrix:\n",
+    #       mapped_structure.lattice().column_vector_matrix())
+    # print("atom_coordinate_frac:\n",
+    #       mapped_structure.atom_coordinate_frac().transpose())
     # print("atom_type:", mapped_structure_atom_type)
 
     # lattice mapping relation:
@@ -248,11 +251,9 @@ def test_map_structures_5():
     prim_occ_dof = prim.occ_dof()
     L1 = prim.lattice().column_vector_matrix()
 
-    Qi = Rotation.from_euler("z", 30, degrees=True).as_matrix()
-    # Qi = np.array([
-    #     [ 0.8660254, -0.5, 0.],
-    #     [ 0.5, 0.8660254, 0.],
-    #     [ 0., 0., 1.]])
+    # from scipy.spatial.transform import Rotation
+    # Qi = Rotation.from_euler("z", 30, degrees=True).as_matrix()
+    Qi = np.array([[0.8660254, -0.5, 0.0], [0.5, 0.8660254, 0.0], [0.0, 0.0, 1.0]])
     Ui = np.array([[1.01, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
     Fi = Qi @ Ui
 

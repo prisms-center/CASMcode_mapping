@@ -1,0 +1,10 @@
+from skbuild import setup
+
+setup(
+    name="libcasm-mapping",
+    version="2.0a1",
+    packages=["libcasm", "libcasm.mapping"],
+    package_dir={"": "python"},
+    cmake_install_dir="python/libcasm",
+    include_package_data=False,
+)

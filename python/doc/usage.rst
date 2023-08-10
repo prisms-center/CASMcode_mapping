@@ -1,7 +1,7 @@
 Usage
 =====
 
-The :func:`~libcasm.mapping.methods.map_structures` method finds mappings of a crystal structure (:class:`~libcasm.xtal.Structure`) to a CASM :class:`~libcasm.xtal.Prim`, which specifies a primitive crystal structure and allowed occupation degrees of freedom (DoF). Currently the method is limited to atomic occupants.
+The :func:`~libcasm.mapping.methods.map_structures` method finds mappings of a crystal structure (:class:`~libcasm.xtal.Structure`) with atomic occupants to a CASM :class:`~libcasm.xtal.Prim`, which specifies a primitive crystal structure and allowed occupation degrees of freedom (DoF).
 
 The result of a mapping is a :class:`~libcasm.mapping.info.StructureMappingResults` object, giving possible structure mappings, sorted by total cost. Each structure mapping consists of a lattice mapping (see :class:`~libcasm.mapping.info.LatticeMapping`) with a lattice mapping cost, and an atom mapping (see :class:`~libcasm.mapping.info.AtomMapping`) with an atom mapping cost. The total cost is a weighted sum of the lattice and atom mapping costs.
 

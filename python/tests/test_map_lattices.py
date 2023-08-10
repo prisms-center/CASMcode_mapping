@@ -1,5 +1,7 @@
 import math
+
 import numpy as np
+
 import libcasm.mapping.methods as mapmethods
 import libcasm.xtal as xtal
 
@@ -66,7 +68,10 @@ def test_map_lattices_2():
 
 
 def test_map_lattices_3():
-    """Map to Ezz: Use lattice1 point group -> # of tied-for-lowest cost mappings == 1"""
+    """Map to Ezz
+
+    Use lattice1 point group -> Number of tied-for-lowest cost mappings == 1
+    """
     lattice1 = xtal.Lattice(np.eye(3))
     lattice2 = xtal.Lattice(
         np.array(

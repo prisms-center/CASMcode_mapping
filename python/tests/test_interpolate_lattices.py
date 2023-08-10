@@ -1,15 +1,15 @@
 from math import sqrt
+
 import numpy as np
+
 import libcasm.mapping.methods as mapmethods
 import libcasm.xtal as xtal
 import libcasm.xtal.lattices as xtal_lattices
 
 # testing
-from libcasm.mapping.info import LatticeMapping
 
 
 def test_interpolate_bcc_fcc_lattices():
-
     bcc_lattice = xtal_lattices.BCC(r=1.0)
     bcc_point_group = xtal.make_point_group(bcc_lattice)
 
@@ -72,7 +72,6 @@ def test_interpolate_bcc_fcc_lattices():
 
 
 def test_interpolate_bcc_hcp_lattices():
-
     bcc_lattice = xtal_lattices.BCC(r=1.0)
     bcc_point_group = xtal.make_point_group(bcc_lattice)
 
