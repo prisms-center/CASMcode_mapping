@@ -71,6 +71,12 @@ jobs:
         shell: bash
         run: |
           cd CASMcode_mapping
+          export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
+          ls -hl ${CASM_PREFIX}/lib
+          ls -hl ${CASM_PREFIX}/mapping
+          ls -hl ${CASM_PREFIX}/mapping/info
+          ls -hl ${CASM_PREFIX}/mapping/mapsearch
+          ls -hl ${CASM_PREFIX}/mapping/methods
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
