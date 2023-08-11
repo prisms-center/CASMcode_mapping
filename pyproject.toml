@@ -55,8 +55,8 @@ build = "cp39-* cp310-* cp311-*"
 # Build for cpython only
 skip =  "pp*"
 
-# Need libcasm-global at wheel repair stage
-before-build = "pip install libcasm-global>=2.0.2"
+# Need libcasm dependencies at wheel repair stage
+before-build = "pip install -r build_requirements.txt"
 
 # Testing
 test-requires = "pytest pytest-datadir"
