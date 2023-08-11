@@ -20,6 +20,7 @@ jobs:
       - name: checkout libcasm-xtal
         uses: actions/checkout@v3
         with:
+          repository: prisms-center/CASMcode_crystallography
           path: CASMcode_crystallography
 
       - name: checkout libcasm-mapping
@@ -75,7 +76,7 @@ jobs:
 
       - name: Set up doc requirements
         run: |
-          cd CASMcode_crystallography
+          cd CASMcode_mapping
           pip install -r doc_requirements.txt
 
       - name: build docs
