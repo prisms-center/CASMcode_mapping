@@ -41,8 +41,10 @@ xtal::BasicStructure make_bcc_basicstructure() {
               Eigen::Vector3d{0.0, 0.0, 4.0}};
 
   BasicStructure struc{lat};
-  struc.set_basis({Site{Coordinate{0.0, 0.0, 0.0, lat, CART}, {A, B}},
-                   Site{Coordinate{2.0, 2.0, 2.0, lat, CART}, {A, B}}});
+  struc.set_basis({Site{Coordinate{0.0, 0.0, 0.0, lat, CART},
+                        std::vector<Molecule>({A, B})},
+                   Site{Coordinate{2.0, 2.0, 2.0, lat, CART},
+                        std::vector<Molecule>({A, B})}});
   return struc;
 }
 
