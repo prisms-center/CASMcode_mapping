@@ -26,7 +26,7 @@ using namespace CASM::mapping;
 
 }  // namespace CASMpy
 
-PYBIND11_MODULE(_methods, m) {
+PYBIND11_MODULE(_mapping_methods, m) {
   using namespace CASMpy;
 
   m.doc() = R"pbdoc(

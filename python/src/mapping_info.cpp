@@ -32,7 +32,7 @@ StructureMapping make_structure_mapping(
 
 }  // namespace CASMpy
 
-PYBIND11_MODULE(_info, m) {
+PYBIND11_MODULE(_mapping_info, m) {
   using namespace CASMpy;
 
   m.doc() = R"pbdoc(

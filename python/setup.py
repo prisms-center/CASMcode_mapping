@@ -66,15 +66,17 @@ ext_modules_params = {
 
 ext_modules = [
     Pybind11Extension(
-        "libcasm.mapping.info._info", ["src/mapping_info.cpp"], **ext_modules_params
+        "libcasm.mapping.info._mapping_info",
+        ["src/mapping_info.cpp"],
+        **ext_modules_params,
     ),
     Pybind11Extension(
-        "libcasm.mapping.methods._methods",
+        "libcasm.mapping.methods._mapping_methods",
         ["src/mapping_methods.cpp"],
         **ext_modules_params,
     ),
     Pybind11Extension(
-        "libcasm.mapping.mapsearch._mapsearch",
+        "libcasm.mapping.mapsearch._mapping_mapsearch",
         ["src/mapping_mapsearch.cpp"],
         **ext_modules_params,
     ),
@@ -84,7 +86,13 @@ ext_modules = [
 setup(
     name="libcasm-mapping",
     version=__version__,
-    packages=["libcasm", "libcasm.mapping"],
+    packages=[
+        "libcasm",
+        "libcasm.mapping",
+        "libcasm.mapping.info",
+        "libcasm.mapping.mapsearch",
+        "libcasm.mapping.methods",
+    ],
     install_requires=["pybind11", "libcasm-global", "libcasm-xtal"],
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext},
