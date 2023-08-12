@@ -35,12 +35,19 @@ jobs:
           sudo apt-get install build-essential cmake
           pip install --upgrade pip wheel
 
-      - name: make global
+      - name: build global wheel
         shell: bash
         run: |
           cd CASMcode_global
           git submodule update --init --recursive
-          pip install -v .
+          pip install -r build_requirements
+          python -m build
+
+      - name: install global wheel
+        shell: bash
+        run: |
+          cd CASMcode_global
+          pip install dist/*.whl
 
       - name: make test global
         shell: bash
@@ -49,11 +56,18 @@ jobs:
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
-      - name: make xtal
+      - name: build xtal wheel
         shell: bash
         run: |
           cd CASMcode_crystallography
-          pip install -v .
+          pip install -r build_requirements
+          python -m build
+
+      - name: install xtal wheel
+        shell: bash
+        run: |
+          cd CASMcode_crystallography
+          pip install dist/*.whl
 
       - name: make test xtal
         shell: bash
@@ -66,6 +80,7 @@ jobs:
         shell: bash
         run: |
           cd CASMcode_mapping
+          pip install -r build_requirements
           pip install -v .
 
       - name: make test mapping
