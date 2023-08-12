@@ -143,6 +143,13 @@ target_link_libraries(casm_mapping
   CASM::casm_global
   CASM::casm_crystallography
 )
+if(APPLE)
+  set_target_properties(
+    casm_mapping PROPERTIES INSTALL_RPATH "@loader_path")
+else()
+  set_target_properties(
+    casm_mapping PROPERTIES INSTALL_RPATH "$ORIGIN")
+endif()
 
 
 ##############################################
