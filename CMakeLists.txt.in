@@ -184,6 +184,11 @@ if(DEFINED SKBUILD)
   target_link_libraries(_mapping_info PRIVATE CASM::casm_global)
   target_link_libraries(_mapping_info PRIVATE CASM::casm_crystallography)
   target_link_libraries(_mapping_info PRIVATE casm_mapping)
+  target_link_libraries(_mapping_info
+    CASM::casm_global
+    CASM::casm_crystallography
+    casm_mapping
+  )
   install(TARGETS _mapping_info DESTINATION mapping/info)
   if(APPLE)
     set_target_properties(
@@ -199,6 +204,11 @@ if(DEFINED SKBUILD)
   target_link_libraries(_mapping_mapsearch PRIVATE CASM::casm_global)
   target_link_libraries(_mapping_mapsearch PRIVATE CASM::casm_crystallography)
   target_link_libraries(_mapping_mapsearch PRIVATE casm_mapping)
+  target_link_libraries(_mapping_mapsearch
+    CASM::casm_global
+    CASM::casm_crystallography
+    casm_mapping
+  )
   install(TARGETS _mapping_mapsearch DESTINATION mapping/mapsearch)
   if(APPLE)
     set_target_properties(
@@ -214,6 +224,11 @@ if(DEFINED SKBUILD)
   target_link_libraries(_mapping_methods PRIVATE CASM::casm_global)
   target_link_libraries(_mapping_methods PRIVATE CASM::casm_crystallography)
   target_link_libraries(_mapping_methods PRIVATE casm_mapping)
+  target_link_libraries(_mapping_methods
+    CASM::casm_global
+    CASM::casm_crystallography
+    casm_mapping
+  )
   install(TARGETS _mapping_methods DESTINATION mapping/methods)
   if(APPLE)
     set_target_properties(
