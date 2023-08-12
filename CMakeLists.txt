@@ -219,9 +219,6 @@ if(DEFINED SKBUILD)
   ### libcasm.mapping.info._mapping_info ###
   pybind11_add_module(_mapping_info MODULE
                       "${PROJECT_SOURCE_DIR}/python/src/mapping_info.cpp")
-  target_link_libraries(_mapping_info PRIVATE CASM::casm_global)
-  target_link_libraries(_mapping_info PRIVATE CASM::casm_crystallography)
-  target_link_libraries(_mapping_info PRIVATE casm_mapping)
   target_link_libraries(_mapping_info
     CASM::casm_global
     CASM::casm_crystallography
@@ -239,9 +236,6 @@ if(DEFINED SKBUILD)
   ### libcasm.mapping.mapsearch._mapping_mapsearch ###
   pybind11_add_module(_mapping_mapsearch MODULE
                       "${PROJECT_SOURCE_DIR}/python/src/mapping_mapsearch.cpp")
-  target_link_libraries(_mapping_mapsearch PRIVATE CASM::casm_global)
-  target_link_libraries(_mapping_mapsearch PRIVATE CASM::casm_crystallography)
-  target_link_libraries(_mapping_mapsearch PRIVATE casm_mapping)
   target_link_libraries(_mapping_mapsearch
     CASM::casm_global
     CASM::casm_crystallography
@@ -259,9 +253,6 @@ if(DEFINED SKBUILD)
   ### libcasm.mapping.methods._mapping_methods ###
   pybind11_add_module(_mapping_methods MODULE
                       "${PROJECT_SOURCE_DIR}/python/src/mapping_methods.cpp")
-  target_link_libraries(_mapping_methods PRIVATE CASM::casm_global)
-  target_link_libraries(_mapping_methods PRIVATE CASM::casm_crystallography)
-  target_link_libraries(_mapping_methods PRIVATE casm_mapping)
   target_link_libraries(_mapping_methods
     CASM::casm_global
     CASM::casm_crystallography
