@@ -1,4 +1,4 @@
-name: Testing source build on ubuntu-latest
+name: Testing source build using wheels on ubuntu-latest
 
 on: [push, pull_request]
 
@@ -40,7 +40,7 @@ jobs:
         run: |
           cd CASMcode_global
           git submodule update --init --recursive
-          pip install -r build_requirements
+          pip install -r build_requirements.txt
           python -m build
 
       - name: install global wheel
@@ -60,7 +60,7 @@ jobs:
         shell: bash
         run: |
           cd CASMcode_crystallography
-          pip install -r build_requirements
+          pip install -r build_requirements.txt
           python -m build
 
       - name: install xtal wheel
@@ -80,7 +80,7 @@ jobs:
         shell: bash
         run: |
           cd CASMcode_mapping
-          pip install -r build_requirements
+          pip install -r build_requirements.txt
           pip install -v .
 
       - name: make test mapping
