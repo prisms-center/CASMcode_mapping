@@ -80,7 +80,15 @@ jobs:
           ls -hl ${CASM_PREFIX}/mapping/info
           ls -hl ${CASM_PREFIX}/mapping/mapsearch
           ls -hl ${CASM_PREFIX}/mapping/methods
+          echo "_mapping_info:"
           readelf --dynamic ${CASM_PREFIX}/mapping/info/_mapping_info*
+          ldd ${CASM_PREFIX}/mapping/info/_mapping_info*
+          echo "_mapping_mapsearch:"
+          readelf --dynamic ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
+          ldd ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
+          echo "_mapping_methods:"
+          readelf --dynamic ${CASM_PREFIX}/mapping/methods/_mapping_methods*
+          ldd ${CASM_PREFIX}/mapping/methods/_mapping_methods*
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
