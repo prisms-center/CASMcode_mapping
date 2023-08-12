@@ -73,10 +73,14 @@ jobs:
           cd CASMcode_mapping
           export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
           ls -hl ${CASM_PREFIX}/lib
+          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_global*
+          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_crystallography*
+          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_mapping*
           ls -hl ${CASM_PREFIX}/mapping
           ls -hl ${CASM_PREFIX}/mapping/info
           ls -hl ${CASM_PREFIX}/mapping/mapsearch
           ls -hl ${CASM_PREFIX}/mapping/methods
+          readelf --dynamic ${CASM_PREFIX}/mapping/info/_mapping_info*
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
