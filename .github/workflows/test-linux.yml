@@ -27,7 +27,7 @@ jobs:
           echo "SKBUILD_BUILD_OPTIONS=${{ env.SKBUILD_BUILD_OPTIONS }}" >> "$GITHUB_ENV"
           export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
           echo "CASM_PREFIX: ${CASM_PREFIX}"
-          patchelf --set-rpath "$ORIGIN" ${CASM_PREFIX}/lib/libcasm_crystallography*
+          patchelf --set-rpath '$ORIGIN' ${CASM_PREFIX}/lib/libcasm_crystallography*
       
 
       - name: make
