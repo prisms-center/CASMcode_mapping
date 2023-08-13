@@ -33,7 +33,7 @@ jobs:
       - name: make
         shell: bash
         run: |
-          pip install -v .
+          pip install -v --no-build-isolation .
 
       - name: check libs
         shell: bash

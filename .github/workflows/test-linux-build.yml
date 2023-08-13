@@ -32,7 +32,7 @@ jobs:
       - name: make
         shell: bash
         run: |
-          python -m build
+          python -m build --no-isolation
 
       - name: install
         shell: bash
