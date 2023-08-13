@@ -25,15 +25,11 @@ jobs:
           pip install -r test_requirements.txt
           echo "SKBUILD_CONFIGURE_OPTIONS=${{ env.SKBUILD_CONFIGURE_OPTIONS }}" >> "$GITHUB_ENV"
           echo "SKBUILD_BUILD_OPTIONS=${{ env.SKBUILD_BUILD_OPTIONS }}" >> "$GITHUB_ENV"
-          export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
-          echo "CASM_PREFIX: ${CASM_PREFIX}"
-          patchelf --set-rpath '$ORIGIN' ${CASM_PREFIX}/lib/libcasm_crystallography*
-      
 
       - name: make
         shell: bash
         run: |
-          pip install -v --no-build-isolation .
+          pip install -v .
 
       - name: check libs
         shell: bash
