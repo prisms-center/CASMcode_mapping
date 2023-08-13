@@ -25,6 +25,10 @@ jobs:
           pip install -r test_requirements.txt
           echo "SKBUILD_CONFIGURE_OPTIONS=${{ env.SKBUILD_CONFIGURE_OPTIONS }}" >> "$GITHUB_ENV"
           echo "SKBUILD_BUILD_OPTIONS=${{ env.SKBUILD_BUILD_OPTIONS }}" >> "$GITHUB_ENV"
+          export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
+          echo "CASM_PREFIX: ${CASM_PREFIX}"
+          patchelf --set-rpath "$ORIGIN" ${CASM_PREFIX}/lib/libcasm_crystallography*
+      
 
       - name: make
         shell: bash
@@ -34,8 +38,10 @@ jobs:
       - name: check libs
         shell: bash
         run: |
+          
           export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
           echo "CASM_PREFIX: ${CASM_PREFIX}"
+          
           ls -hl ${CASM_PREFIX}/lib
 
           echo "libcasm_global:"
@@ -74,39 +80,6 @@ jobs:
       - name: make test
         shell: bash
         run: |
-          export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
-          echo "CASM_PREFIX: ${CASM_PREFIX}"
-          ls -hl ${CASM_PREFIX}/lib
-          
-          echo "libcasm_global:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_global*
-          ldd ${CASM_PREFIX}/lib/libcasm_global*
-          
-          echo "libcasm_crystallography:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_crystallography*
-          ldd ${CASM_PREFIX}/lib/libcasm_crystallography*
-          
-          echo "libcasm_mapping:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_mapping*
-          ldd ${CASM_PREFIX}/lib/libcasm_mapping*
-          
-          ls -hl ${CASM_PREFIX}/mapping
-          ls -hl ${CASM_PREFIX}/mapping/info
-          ls -hl ${CASM_PREFIX}/mapping/mapsearch
-          ls -hl ${CASM_PREFIX}/mapping/methods
-          
-          echo "_mapping_info:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/info/_mapping_info*
-          ldd ${CASM_PREFIX}/mapping/info/_mapping_info*
-          
-          echo "_mapping_mapsearch:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
-          ldd ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
-          
-          echo "_mapping_methods:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/methods/_mapping_methods*
-          ldd ${CASM_PREFIX}/mapping/methods/_mapping_methods*
-          
           python -m pytest -rsap python/tests
 
       - name: Set up doc requirements
