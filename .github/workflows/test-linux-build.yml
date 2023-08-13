@@ -59,6 +59,10 @@ jobs:
           ls -hl ${CASM_PREFIX}/mapping/mapsearch
           ls -hl ${CASM_PREFIX}/mapping/methods
           
+          echo "_xtal:"
+          readelf --dynamic ${CASM_PREFIX}/xtal/_xtal*
+          ldd ${CASM_PREFIX}/xtal/_xtal*
+
           echo "_mapping_info:"
           readelf --dynamic ${CASM_PREFIX}/mapping/info/_mapping_info*
           ldd ${CASM_PREFIX}/mapping/info/_mapping_info*
