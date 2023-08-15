@@ -45,7 +45,7 @@ PYBIND11_MODULE(_mapping_info, m) {
         transformations.
 
     )pbdoc";
-  py::module::import("libcasm.xtal");
+  py::module_::import("libcasm.xtal");
 
   py::class_<LatticeMapping>(m, "LatticeMapping", R"pbdoc(
       A mapping between two lattices
