@@ -78,9 +78,9 @@ mapping::AtomMapping make_atom_mapping(
 }
 
 bool is_symmetry_breaking_atom_cost(std::string atom_cost_method) {
-  if (atom_cost_method == "isotropic_atom_cost") {
+  if (atom_cost_method == "isotropic_disp_cost") {
     return false;
-  } else if (atom_cost_method == "symmetry_breaking_atom_cost") {
+  } else if (atom_cost_method == "symmetry_breaking_disp_cost") {
     return true;
   } else {
     throw std::runtime_error("Error: atom_cost_method not recognized");
@@ -103,8 +103,8 @@ namespace mapping {
 ///     equivalent to only including the identity operation.
 /// \param min_cost Keep atom mappings with cost >= min_cost
 /// \param max_cost Keep atom mappings with cost <= max_cost
-/// \param atom_cost_method One of "isotropic_atom_cost" or
-///     "symmetry_breaking_atom_cost"
+/// \param atom_cost_method One of "isotropic_disp_cost" or
+///     "symmetry_breaking_disp_cost"
 /// \param k_best Keep the k_best results satisfying the min_cost and
 ///     max_cost constraints. If there are approximate ties, those
 ///     will also be kept.

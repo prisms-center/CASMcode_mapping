@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 import libcasm.mapping.info as info
 import libcasm.xtal as xtal
@@ -63,6 +64,10 @@ def test_structure_mapping_io():
     obj = info.AtomMapping.from_dict(data)
     assert isinstance(obj, info.AtomMapping)
 
+    # Do not segfault on out of bounds index
+    with pytest.raises(IndexError):
+        structure_mappings[len(structure_mappings)]
+
 
 def test_lattice_and_atom_mapping_io():
     prim = xtal_prims.BCC(r=1.0, occ_dof=["A", "B", "Va"])
@@ -101,12 +106,16 @@ def test_lattice_and_atom_mapping_io():
     obj = info.ScoredLatticeMapping.from_dict(data)
     assert isinstance(obj, info.ScoredLatticeMapping)
 
+    # Do not segfault on out of bounds index
+    with pytest.raises(IndexError):
+        lattice_mappings[len(lattice_mappings)]
+
     atom_mappings = map_atoms(
         prim=prim,
         structure=hcp_structure,
         lattice_mapping=lattice_mappings[0],
         prim_factor_group=prim_factor_group,
-        atom_cost_method="isotropic_atom_cost",
+        atom_cost_method="isotropic_disp_cost",
         max_cost=1e20,
         min_cost=0.0,
         k_best=10,
@@ -130,3 +139,7 @@ def test_lattice_and_atom_mapping_io():
     assert isinstance(data, dict)
     obj = info.ScoredAtomMapping.from_dict(data)
     assert isinstance(obj, info.ScoredAtomMapping)
+
+    # Do not segfault on out of bounds index
+    with pytest.raises(IndexError):
+        atom_mappings[len(lattice_mappings)]
