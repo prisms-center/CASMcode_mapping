@@ -1,13 +1,17 @@
 name: Testing on ubuntu-latest
 
-on: [push, pull_request]
+on:
+  workflow_run:
+    workflows: ["Build CASM dependencies on Ubuntu"]
+    types:
+      - completed
 
 env:
-  SKBUILD_CONFIGURE_OPTIONS: -DCMAKE_CXX_FLAGS='-D_GLIBCXX_USE_CXX11_ABI=0'
   SKBUILD_BUILD_OPTIONS: --verbose
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -23,55 +27,33 @@ jobs:
           pip install --upgrade pip wheel
           pip install -r build_requirements.txt
           pip install -r test_requirements.txt
-          echo "SKBUILD_CONFIGURE_OPTIONS=${{ env.SKBUILD_CONFIGURE_OPTIONS }}" >> "$GITHUB_ENV"
           echo "SKBUILD_BUILD_OPTIONS=${{ env.SKBUILD_BUILD_OPTIONS }}" >> "$GITHUB_ENV"
+
+      ### libcasm-global ###
+      - name: restore libcasm-global cache
+        id: cache-libcasm-global-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: CASMcode_global/dist
+          key: ${{ runner.os }}-libcasm-global-v2-0-3
+
+      ### libcasm-xtal ###
+      - name: restore libcasm-xtal cache
+        id: cache-libcasm-xtal-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: CASMcode_crystallography/dist
+          key: ${{ runner.os }}-libcasm-xtal-v2-0a2
+
+      - name: Install CASM dependencies
+        run: |
+          pip install CASMcode_global/dist/*.whl
+          pip install CASMcode_crystallography/dist/*.whl
 
       - name: make
         shell: bash
         run: |
           pip install -v .
-
-      - name: check libs
-        shell: bash
-        run: |
-          
-          export CASM_PREFIX=$(python -c 'import site; print(site.getsitepackages()[0])')/libcasm
-          echo "CASM_PREFIX: ${CASM_PREFIX}"
-          
-          ls -hl ${CASM_PREFIX}/lib
-
-          echo "libcasm_global:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_global*
-          ldd ${CASM_PREFIX}/lib/libcasm_global*
-
-          echo "libcasm_crystallography:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_crystallography*
-          ldd ${CASM_PREFIX}/lib/libcasm_crystallography*
-
-          echo "libcasm_mapping:"
-          readelf --dynamic ${CASM_PREFIX}/lib/libcasm_mapping*
-          ldd ${CASM_PREFIX}/lib/libcasm_mapping*
-
-          ls -hl ${CASM_PREFIX}/mapping
-          ls -hl ${CASM_PREFIX}/mapping/info
-          ls -hl ${CASM_PREFIX}/mapping/mapsearch
-          ls -hl ${CASM_PREFIX}/mapping/methods
-
-          echo "_xtal:"
-          readelf --dynamic ${CASM_PREFIX}/xtal/_xtal*
-          ldd ${CASM_PREFIX}/xtal/_xtal*
-
-          echo "_mapping_info:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/info/_mapping_info*
-          ldd ${CASM_PREFIX}/mapping/info/_mapping_info*
-
-          echo "_mapping_mapsearch:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
-          ldd ${CASM_PREFIX}/mapping/mapsearch/_mapping_mapsearch*
-
-          echo "_mapping_methods:"
-          readelf --dynamic ${CASM_PREFIX}/mapping/methods/_mapping_methods*
-          ldd ${CASM_PREFIX}/mapping/methods/_mapping_methods*
 
       - name: make test
         shell: bash
