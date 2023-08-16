@@ -2,7 +2,7 @@ name: Testing on ubuntu-latest
 
 on:
   workflow_run:
-    workflows: ["Build CASM dependencies on Ubuntu"]
+    workflows: [Build CASM dependencies on Ubuntu]
     types:
       - completed
 
