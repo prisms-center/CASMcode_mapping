@@ -1,6 +1,7 @@
 name: Build CASM dependencies on Ubuntu
 
-on: [push, pull_request]
+on:
+  workflow_call:
 
 jobs:
   build:

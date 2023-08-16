@@ -1,17 +1,16 @@
 name: Testing build on ubuntu-latest
 
-on:
-  workflow_run:
-    workflows: [Build CASM dependencies on Ubuntu]
-    types:
-      - completed
+on: [push, pull_request]
 
 env:
   SKBUILD_BUILD_OPTIONS: --verbose
 
 jobs:
+  build-depends:
+    uses: ./.github/workflows/test-linux-dependencies.yml
+
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: build-depends
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
