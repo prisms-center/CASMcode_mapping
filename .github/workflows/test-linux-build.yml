@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install build-essential cmake
-          pip install --upgrade pip wheel
+          pip install --upgrade pip wheel build
           pip install -r build_requirements.txt
           pip install -r test_requirements.txt
           echo "SKBUILD_BUILD_OPTIONS=${{ env.SKBUILD_BUILD_OPTIONS }}" >> "$GITHUB_ENV"
