@@ -40,6 +40,7 @@ jobs:
           cd CASMcode_global
           git submodule update --init --recursive
           python -m build
+          pip install dist/*.whl
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
@@ -73,6 +74,7 @@ jobs:
           cd CASMcode_crystallography
           git submodule update --init --recursive
           python -m build
+          pip install dist/*.whl
           pip install -r test_requirements.txt
           python -m pytest -rsap python/tests
 
