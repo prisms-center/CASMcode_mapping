@@ -10,6 +10,7 @@
 #include "casm/mapping/AtomMapping.hh"
 #include "casm/mapping/LatticeMapping.hh"
 #include "casm/mapping/StructureMapping.hh"
+#include "casm/mapping/lattice_cost.hh"
 #include "casm/mapping/io/json_io.hh"
 #include "pybind11_json/pybind11_json.hpp"
 
@@ -769,6 +770,42 @@ PYBIND11_MODULE(_mapping_info, m) {
         return ss.str();
       },
       "Pretty-print JSON to string.", py::arg("data"));
+
+  m.def(
+      "lattice_isotropic_strain_cost", &isotropic_strain_cost,
+      R"pbdoc(
+      Return the isotropic strain cost for a lattice deformation.
+
+      Parameters
+      ----------
+      deformation_gradient : array_like, shape=(3,3)
+          The parent-to-child deformation gradient tensor, :math:`F`, a shape=(3,3)
+          matrix.
+
+      Returns
+      -------
+      float : The isotropic strain cost for the lattice deformation given by :math:`F`.
+      )pbdoc",
+      py::arg("deformation_gradient"));
+
+    m.def(
+      "lattice_symmetry_breaking_strain_cost", &symmetry_breaking_strain_cost,
+      R"pbdoc(
+      Return the symmetry-breaking strain cost for a lattice deformation.
+
+      Parameters
+      ----------
+      deformation_gradient : array_like, shape=(3,3)
+          The parent-to-child deformation gradient tensor, :math:`F`, a shape=(3,3)
+          matrix.
+      lattice1_point_group : list[:class:`xtal::SymOp`]
+          The point group of the parent crystal lattice.
+
+      Returns
+      -------
+      float : The symmetry-breaking strain cost for the lattice deformation given by :math:`F`.
+      )pbdoc",
+      py::arg("deformation_gradient"), py::arg("lattice1_point_group"));
 
 #ifdef VERSION_INFO
   m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
