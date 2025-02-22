@@ -313,7 +313,7 @@ PYBIND11_MODULE(_mapping_methods, m) {
           The reference "parent" structure, with lattice :math:`L_1`,
           represented as Prim, with occupation DoF indicating which atom
           types are allowed to map to each basis site.
-      structure : libcasm.xtal.Lattice
+      structure : libcasm.xtal.Structure
           The "child" structure, with lattice :math:`L_2`.
       lattice_mapping : ~libcasm.mapping.info.LatticeMapping
           Defines the lattice mapping from the "parent" structure to
