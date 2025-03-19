@@ -1,4 +1,5 @@
 """Test structure mapping"""
+
 import math
 
 import numpy as np
@@ -468,7 +469,7 @@ def test_make_mapped_structure_0(shared_datadir):
             prim=xtal_prim, lattice_mapping=lattice_mapping, atom_mapping=i
         )
 
-    print(structure_mapping.to_dict())
+    # print(structure_mapping.to_dict())
 
     # attempt to make the mapped structure
     mapped_structure = mapmethods.make_mapped_structure(
@@ -477,3 +478,9 @@ def test_make_mapped_structure_0(shared_datadir):
     )
 
     assert isinstance(mapped_structure, xtal.Structure)
+
+    # make sure the forces in the mapped_structure are non-zero
+    assert not np.allclose(
+        np.zeros(mapped_structure.atom_properties()["force"].shape),
+        mapped_structure.atom_properties()["force"],
+    )
