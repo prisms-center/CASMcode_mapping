@@ -1,4 +1,5 @@
 """Construct custom mapping search algorithms"""
+
 from ._mapping_mapsearch import (
     AtomMappingSearchData,
     IsotropicAtomCost,

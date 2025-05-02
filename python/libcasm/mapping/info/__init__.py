@@ -1,4 +1,5 @@
 """CASM lattice and structure mapping data structures"""
+
 from ._mapping_info import (
     AtomMapping,
     AtomMappingResults,
