@@ -165,7 +165,7 @@ xtal::SimpleStructure make_mapped_structure(
     std::string key = pair.first;
     Eigen::MatrixXd const &q2 = pair.second;
     Eigen::MatrixXd q2_with_Va = Eigen::MatrixXd::Zero(q2.rows(), n_sites);
-    q2_with_Va.block(0, q2.rows(), 0, q2.cols()) = q2;
+    q2_with_Va.block(0, 0, q2.rows(), q2.cols()) = q2;
     try {
       AnisoValTraits traits(key);
       Eigen::MatrixXd M = traits.symop_to_matrix(
