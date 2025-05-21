@@ -561,8 +561,8 @@ PYBIND11_MODULE(_mapping_info, m) {
             return jsonConstructor<mapping::StructureMapping>::from_json(json,
                                                                          prim);
           },
-          "Construct a StructureMapping from a Python dict.", py::arg("prim"),
-          py::arg("data"))
+          "Construct a StructureMapping from a Python dict.", py::arg("data"),
+          py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::StructureMapping const &m) -> nlohmann::json {
@@ -617,7 +617,7 @@ PYBIND11_MODULE(_mapping_info, m) {
                 json, prim);
           },
           "Construct a ScoredStructureMapping from a Python dict.",
-          py::arg("prim"), py::arg("data"))
+          py::arg("data"), py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::ScoredStructureMapping const &m) -> nlohmann::json {
@@ -667,7 +667,7 @@ PYBIND11_MODULE(_mapping_info, m) {
             return results;
           },
           "Construct StructureMappingResults from a Python dict.",
-          py::arg("prim"), py::arg("data"))
+          py::arg("data"), py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::StructureMappingResults const &m) -> nlohmann::json {
