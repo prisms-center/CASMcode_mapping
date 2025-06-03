@@ -561,8 +561,22 @@ PYBIND11_MODULE(_mapping_info, m) {
             return jsonConstructor<mapping::StructureMapping>::from_json(json,
                                                                          prim);
           },
-          "Construct a StructureMapping from a Python dict.", py::arg("prim"),
-          py::arg("data"))
+          R"pbdoc(
+          Construct a StructureMapping from a Python dict.
+
+          Parameters
+          ----------
+          data : dict
+              The StructureMapping as a Python dict
+          prim : ~libcasm.xtal.Prim
+              A :class:`~libcasm.xtal.Prim`
+
+          Returns
+          -------
+          structure_mapping : ~libcasm.mapping.info.StructureMapping
+              The structure mapping
+          )pbdoc",
+          py::arg("data"), py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::StructureMapping const &m) -> nlohmann::json {
@@ -616,8 +630,22 @@ PYBIND11_MODULE(_mapping_info, m) {
             return jsonConstructor<mapping::ScoredStructureMapping>::from_json(
                 json, prim);
           },
-          "Construct a ScoredStructureMapping from a Python dict.",
-          py::arg("prim"), py::arg("data"))
+          R"pbdoc(
+          Construct a ScoredStructureMapping from a Python dict.
+
+          Parameters
+          ----------
+          data : dict
+              The ScoredStructureMapping as a Python dict
+          prim : ~libcasm.xtal.Prim
+              A :class:`~libcasm.xtal.Prim`
+
+          Returns
+          -------
+          scored_structure_mapping : ~libcasm.mapping.info.ScoredStructureMapping
+              The scored structure mapping
+          )pbdoc",
+          py::arg("data"), py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::ScoredStructureMapping const &m) -> nlohmann::json {
@@ -666,8 +694,22 @@ PYBIND11_MODULE(_mapping_info, m) {
             from_json(results, json, prim);
             return results;
           },
-          "Construct StructureMappingResults from a Python dict.",
-          py::arg("prim"), py::arg("data"))
+          R"pbdoc(
+          Construct StructureMappingResults from a Python dict.
+
+          Parameters
+          ----------
+          data : dict
+              The StructureMappingResults as a Python dict
+          prim : ~libcasm.xtal.Prim
+              A :class:`~libcasm.xtal.Prim`
+
+          Returns
+          -------
+          results : ~libcasm.mapping.info.StructureMappingResults
+              The structure mapping results
+          )pbdoc",
+          py::arg("data"), py::arg("prim"))
       .def(
           "to_dict",
           [](mapping::StructureMappingResults const &m) -> nlohmann::json {

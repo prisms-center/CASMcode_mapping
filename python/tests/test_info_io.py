@@ -28,7 +28,7 @@ def test_structure_mapping_io():
     assert isinstance(structure_mappings, info.StructureMappingResults)
     data = structure_mappings.to_dict()
     assert isinstance(data, list)
-    obj = info.StructureMappingResults.from_dict(data, prim)
+    obj = info.StructureMappingResults.from_dict(data=data, prim=prim)
     assert isinstance(obj, info.StructureMappingResults)
     assert len(obj) == 3
 
@@ -37,7 +37,7 @@ def test_structure_mapping_io():
     assert isinstance(scored, info.ScoredStructureMapping)
     data = scored.to_dict()
     assert isinstance(data, dict)
-    obj = info.ScoredStructureMapping.from_dict(data, prim)
+    obj = info.ScoredStructureMapping.from_dict(data=data, prim=prim)
     assert isinstance(obj, info.ScoredStructureMapping)
 
     # StructureMapping
@@ -45,7 +45,7 @@ def test_structure_mapping_io():
     assert isinstance(smap, info.StructureMapping)
     data = smap.to_dict()
     assert isinstance(data, dict)
-    obj = info.StructureMapping.from_dict(data, prim)
+    obj = info.StructureMapping.from_dict(data=data, prim=prim)
     assert isinstance(obj, info.StructureMapping)
 
     # LatticeMapping
