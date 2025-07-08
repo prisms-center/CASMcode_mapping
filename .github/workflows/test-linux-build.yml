@@ -36,7 +36,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: CASMcode_global/dist
-          key: ${{ runner.os }}-libcasm-global-v2-0-6
+          key: ${{ runner.os }}-libcasm-global-v2-1-0
 
       ### libcasm-xtal ###
       - name: restore libcasm-xtal cache
@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: CASMcode_crystallography/dist
-          key: ${{ runner.os }}-libcasm-xtal-v2-0-0
+          key: ${{ runner.os }}-libcasm-xtal-v2-1-0
 
       - name: Install CASM dependencies
         run: |
