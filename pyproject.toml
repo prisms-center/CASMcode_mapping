@@ -5,15 +5,15 @@ requires = [
     "scikit-build",
     "cmake>=3.20",
     "ninja",
-    "pybind11~=2.8",
-    "libcasm-global>=2.1.0",
-    "libcasm-xtal>=2.1.0",
+    "pybind11~=3.0",
+    "libcasm-global>=2.2.0",
+    "libcasm-xtal>=2.2.0",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "libcasm-mapping"
-version = "2.1.0"
+version = "2.2.0"
 authors = [
   { name="CASM developers", email="casm-developers@lists.engr.ucsb.edu" },
 ]
@@ -28,8 +28,8 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-  "libcasm-global>=2.1.0",
-  "libcasm-xtal>=2.1.0",
+  "libcasm-global>=2.2.0",
+  "libcasm-xtal>=2.2.0",
   "numpy",
 ]
 
