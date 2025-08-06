@@ -205,16 +205,20 @@ std::vector<Eigen::Vector3d> make_trial_translations(
 
 /// \brief A function, such as `make_atom_to_site_cost`,
 ///     which calculates the atom-to-site mapping cost given the
-///     site-to-atom displacement, atom_type, allowed_atom_types,
+///     lattice in which the displacements are calculated under
+///     periodic boundary conditions, the site-to-atom
+///     displacement, atom_type, allowed_atom_types,
 ///     and value to use for unallowed mappings (infinity).
 using AtomToSiteCostFunction = std::function<double(
-    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    xtal::Lattice const &lattice, Eigen::Vector3d const &displacement,
+    std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity)>;
 
 /// \brief Make the mapping cost for a particular atom
 ///     to a particular structure site
 double make_atom_to_site_cost(
-    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    xtal::Lattice const &lattice, Eigen::Vector3d const &displacement,
+    std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity);
 
 /// \brief Holds data shared amongst all potential atom-to-site

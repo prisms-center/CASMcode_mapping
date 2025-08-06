@@ -33,6 +33,8 @@ namespace mapping_impl {
 ///     translation = F * trial_translation
 ///
 ///
+/// \param lattice Lattice in which the displacements are calculated
+///     under periodic boundary conditions.
 /// \param assignment Assignment solution, with the convention
 ///     `atom_index = assignment[site_index]`. With the cost
 ///     matrix constructed according to the convention
@@ -53,7 +55,7 @@ namespace mapping_impl {
 /// \returns An AtomMapping constructed from the inputs, with
 ///     mean displacement removed.
 AtomMapping make_atom_mapping_from_assignment(
-    std::vector<Index> const &assignment,
+    xtal::Lattice const &lattice, std::vector<Index> const &assignment,
     std::vector<std::vector<Eigen::Vector3d>> const &site_displacements,
     Eigen::VectorXd trial_translation,
     Eigen::Matrix3d const &deformation_gradient,
@@ -63,6 +65,7 @@ AtomMapping make_atom_mapping_from_assignment(
   // atom[perm[i]] -> is assigned to -> site[i]
   auto const &perm = assignment;
 
+  Eigen::VectorXd zero_disp = Eigen::Vector3d::Zero();
   Eigen::Vector3d mean_disp = Eigen::Vector3d::Zero();
   if (enable_remove_mean_displacement) {
     // calculate mean displacement
@@ -78,6 +81,7 @@ AtomMapping make_atom_mapping_from_assignment(
     }
     mean_disp /= n;
   }
+  mean_disp = robust_pbc_displacement_cart(lattice, zero_disp, mean_disp);
 
   // get displacements
   Eigen::MatrixXd disp = Eigen::MatrixXd::Zero(3, N_site);
@@ -87,8 +91,11 @@ AtomMapping make_atom_mapping_from_assignment(
       // implied vacancies - keep disp == 0
       continue;
     }
-    disp.col(site_index) =
-        site_displacements[site_index][atom_index] - mean_disp;
+    // re-calculate the displacements under periodic boundary conditions after
+    // removing the mean displacement
+    disp.col(site_index) = robust_pbc_displacement_cart(
+        lattice, zero_disp,
+        site_displacements[site_index][atom_index] - mean_disp);
   }
 
   // adjust trial_translation
@@ -110,7 +117,20 @@ MappingNode make_mapping_node_from_assignment_node(
     double lattice_cost,
     std::shared_ptr<LatticeMappingSearchData const> lattice_mapping_data,
     std::shared_ptr<AtomMappingSearchData const> atom_mapping_data) {
+  if (!assignment_node.all_col_assigned()) {
+    // Assignment failed: set atom_cost and total_cost to infinity
+    double atom_cost = search.infinity;
+    double total_cost = search.infinity;
+    AtomMapping atom_mapping(Eigen::MatrixXd::Zero(0, 0),  // empty displacement
+                             std::vector<Index>{},         // empty permutation
+                             atom_mapping_data->trial_translation_cart);
+    return MappingNode(lattice_cost, std::move(lattice_mapping_data), atom_cost,
+                       std::move(atom_mapping_data), std::move(assignment_node),
+                       atom_mapping, total_cost);
+  }
+
   AtomMapping atom_mapping = make_atom_mapping_from_assignment(
+      lattice_mapping_data->supercell_lattice,
       murty::make_assignment(assignment_node),
       atom_mapping_data->site_displacements,
       atom_mapping_data->trial_translation_cart,
@@ -160,7 +180,6 @@ std::multiset<MappingNode>::iterator insert(MappingSearch &search,
       }
     }
   }
-
   if (n.total_cost < search.max_cost + search.cost_tol) {
     return search.queue.insert(std::move(mapping_node));
   } else {

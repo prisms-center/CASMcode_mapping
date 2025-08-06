@@ -129,7 +129,7 @@ def test_MappingSearch_1():
                 forced_off=[],
             )
 
-    assert search.size() == 27
+    assert search.size() == 26
 
     while search.size():
         search.partition()
@@ -138,12 +138,12 @@ def test_MappingSearch_1():
     # print("n_results:", len(results))
     # print(xtal.pretty_json(results.to_dict()))
 
-    assert len(results) == 10
+    assert len(results) == 13
 
     # print([x.total_cost() for x in results])
     expected_total_cost = [
         4.52428370788109e-32,
-        0.10015680293184215,
+        0.10015680293184212,
         0.12999352433204403,
         0.1299935243320441,
         0.13493070669609494,
@@ -151,7 +151,10 @@ def test_MappingSearch_1():
         0.16002940363760038,
         0.16775806353212028,
         0.1777205424127767,
-        0.1874828141685117,
+        0.21003096336081667,
+        0.2100309633608167,
+        0.2100309633608167,
+        0.21003096336081678,
     ]
     assert np.allclose(expected_total_cost, [x.total_cost() for x in results])
 
@@ -166,21 +169,27 @@ def test_MappingSearch_1():
         0.18364515718805766,
         0.19910247697709726,
         0.309969868129839,
-        0.056667111467022635,
+        0.23817705993877572,
+        0.2381770599387758,
+        0.2381770599387758,
+        0.23817705993877572,
     ]
     assert np.allclose(expected_lattice_cost, [x.lattice_cost() for x in results])
 
     # print([x.atom_cost() for x in results])
     expected_atom_cost = [
         8.021404778755655e-32,
-        0.13641365008714335,
+        0.1364136500871433,
         0.25767022794238154,
         0.2576702279423817,
         2.2739749456927957e-31,
-        3.495696146724e-31,
+        3.495696146724001e-31,
         0.13641365008714312,
         0.1364136500871433,
-        0.04547121669571441,
-        0.31829851687000077,
+        0.04547121669571443,
+        0.1818848667828576,
+        0.1818848667828576,
+        0.1818848667828576,
+        0.18188486678285787,
     ]
     assert np.allclose(expected_atom_cost, [x.atom_cost() for x in results])

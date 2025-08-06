@@ -80,6 +80,11 @@ struct Node {
 
   /// \brief Compare by cost only
   bool operator<(Node const &rhs) const { return this->cost < rhs.cost; }
+
+  /// \brief Return true if assignment was made
+  bool all_col_assigned() const {  // check if sub_assignment succeeded:
+    return sub_assignment.size() == unassigned_cols.size();
+  }
 };
 
 /// \brief Returns a Node representing the (constrained) assignment problem

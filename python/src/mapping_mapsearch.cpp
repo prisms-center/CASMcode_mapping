@@ -427,7 +427,7 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
             superstructure of the prim they are being mapped to.
         )pbdoc");
 
-  m.def("make_atom_to_site_cost", &make_atom_to_site_cost,
+  m.def("make_atom_to_site_cost", &make_atom_to_site_cost, py::arg("lattice"),
         py::arg("displacement"), py::arg("atom_type"),
         py::arg("allowed_atom_types"), py::arg("infinity"),
         R"pbdoc(
@@ -439,6 +439,9 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
           0.0.
         - of an atom to a site that does not allow the atom type is
           infinity
+        - of a displacement on the lattice voronoi cell boundary is
+          infinity (the displacement is ambiguous as to which periodic
+          image it should map to)
         - otherwise, the mapping cost is equal to displacement length
           squared
 
@@ -449,6 +452,9 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
 
         Parameters
         ----------
+        lattice : libcasm.xtal.Lattice
+            The lattice in which the displacements are calculated under
+            periodic boundary conditions.
         displacement : array_like, shape=(3,)
             The minimum length displacement, accounting for periodic
             boundaries, from the site to the atom.
@@ -519,7 +525,7 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
               ideal superstructure setting (i.e.
               atom_coordinate_cart_in_supercell) to bring the atoms and sites
               into alignment.
-          atom_to_site_cost_f : Optional[Callable[[numpy.ndarray[numpy.float64[3, 1]], str, List[str], float], float]] = None
+          atom_to_site_cost_f : Optional[Callable[[libcasm.xtal.Lattice, numpy.ndarray[numpy.float64[3, 1]], str, List[str], float], float]] = None
               A function used to calculate the cost of mapping an atom to a
               particular site. Expected to match the same signature as
               :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost`, which
@@ -940,7 +946,7 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
               :class:`~libcasm.mapping.mapsearch.WeightedTotalCost.cost`.
               If None, the default value is ``WeightedTotalCost(0.5)``.
 
-          atom_to_site_cost_f : Optional[Callable[[numpy.ndarray[numpy.float64[3, 1]], str, List[str], float], float]] = None
+          atom_to_site_cost_f : Optional[Callable[[libcasm.xtal.Lattice, numpy.ndarray[numpy.float64[3, 1]], str, List[str], float], float]] = None
               A function used to calculate the cost of mapping an atom to a
               particular site. Expected to match the same signature as
               :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost`, which

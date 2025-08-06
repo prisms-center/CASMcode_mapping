@@ -5,14 +5,22 @@ All notable changes to `libcasm-mapping` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.0] - 2025-08-14
+## [2.3.0] - 2025-08-06
+
+### Changed
+
+- Changed `AtomToSiteCostFunction` to take the Lattice used to find displacements under periodic boundary conditions.
+- Changed `make_atom_to_site_cost` to make the cost infinity for displacements that are on the boundary of the Voronio cell. This addresses an issue where the choice of displacement vector for displacement vector was ambiguous and in practice sensitive to small numerical differences, leading to inconsistent mapping results. With the change, atom mappings with displacements on the Voronoi cell boundary will not be selected, and larger supercells will be necessary to find atom mappings with those assignments.
+
+
+## [2.2.0] - 2025-07-14
 
 ### Changed
 
 - Set pybind11~=3.0
 
 
-## [2.1.0] - 2025-08-07
+## [2.1.0] - 2025-07-07
 
 ### Changed
 

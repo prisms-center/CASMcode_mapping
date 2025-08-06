@@ -364,6 +364,8 @@ std::vector<std::vector<Eigen::Vector3d>> make_site_displacements(
 /// \param f A function used to calculate the atom mapping cost
 ///      to a particular site. Follows the signature of
 ///     `make_atom_mapping_cost`.
+/// \param lattice Lattice in which the displacements are calculated
+///     under periodic boundary conditions.
 /// \param site_displacements The site-to-atom displacements,
 ///     of minimum length under periodic boundary conditions.
 /// \param atom_type Vector of size=N_atom containing the
@@ -375,7 +377,7 @@ std::vector<std::vector<Eigen::Vector3d>> make_site_displacements(
 /// \param infinity The value to use for unallowed mappings
 ///
 Eigen::MatrixXd make_cost_matrix(
-    AtomToSiteCostFunction f,
+    AtomToSiteCostFunction f, xtal::Lattice const &lattice,
     std::vector<std::vector<Eigen::Vector3d>> const &site_displacements,
     std::vector<std::string> const &atom_type,
     std::vector<std::vector<std::string>> const &allowed_atom_types,
@@ -408,16 +410,16 @@ Eigen::MatrixXd make_cost_matrix(
   for (Index atom_index = 0; atom_index < N_atom; ++atom_index) {
     for (Index site_index = 0; site_index < N_site; ++site_index) {
       cost_matrix(site_index, atom_index) =
-          f(site_displacements[site_index][atom_index], atom_type[atom_index],
-            allowed_atom_types[site_index], infinity);
+          f(lattice, site_displacements[site_index][atom_index],
+            atom_type[atom_index], allowed_atom_types[site_index], infinity);
     }
   }
   // If N_atom < N_site, treat as additional vacancies to map
   for (Index atom_index = N_atom; atom_index < N_site; ++atom_index) {
     for (Index site_index = 0; site_index < N_site; ++site_index) {
       cost_matrix(site_index, atom_index) =
-          f(Eigen::Vector3d::Zero(), "Va", allowed_atom_types[site_index],
-            infinity);
+          f(lattice, Eigen::Vector3d::Zero(), "Va",
+            allowed_atom_types[site_index], infinity);
     }
   }
 
@@ -656,13 +658,16 @@ std::vector<Eigen::Vector3d> make_trial_translations(
 /// - to a site that does not allow the atom type is infinity
 /// - otherwise, equal to displacement length squared
 ///
+/// \param lattice Lattice in which the displacements are calculated
+///     under periodic boundary conditions.
 /// \param displacement The minimum length displacement, accounting
 ///     for periodic boundaries, from the site to the atom
 /// \param atom_type The atom type.
 /// \param allowed_atom_types The atom types allowed on the site
 /// \param infinity The value to use for unallowed mappings
 double make_atom_to_site_cost(
-    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    xtal::Lattice const &lattice, Eigen::Vector3d const &displacement,
+    std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity) {
   // if vacancy is allowed on site, return 0.0; else return infinity
   if (xtal::is_vacancy(atom_type)) {
@@ -678,6 +683,21 @@ double make_atom_to_site_cost(
   auto begin = allowed_atom_types.begin();
   auto end = allowed_atom_types.end();
   if (std::find(begin, end, atom_type) == end) {
+    return infinity;
+  }
+
+  Eigen::Vector3d lattice_trans;
+  double v_dist = lattice.max_voronoi_measure(displacement, lattice_trans);
+  if (v_dist > 1. + lattice.tol()) {
+    throw std::runtime_error(
+        "Error in make_atom_to_site_cost: "
+        "displacement is larger than the maximum Voronoi measure");
+  } else if (v_dist > (1. - lattice.tol())) {
+    // If displacement is on the boundary of the Voronoi cell, then there
+    // are non-equivalent displacement choices. To ensure
+    // that the cost is the same for all equivalent displacements,
+    // we return infinity and force the use of a larger supercell to
+    // resolve the ambiguity.
     return infinity;
   }
 
@@ -711,8 +731,8 @@ AtomMappingSearchData::AtomMappingSearchData(
           lattice_mapping_data->atom_coordinate_cart_in_supercell,
           trial_translation_cart)),
       cost_matrix(mapping_impl::make_cost_matrix(
-          _atom_to_site_cost_f, site_displacements,
-          lattice_mapping_data->structure_data->atom_type,
+          _atom_to_site_cost_f, lattice_mapping_data->supercell_lattice,
+          site_displacements, lattice_mapping_data->structure_data->atom_type,
           lattice_mapping_data->supercell_allowed_atom_types, _infinity)) {}
 
 }  // namespace mapping
