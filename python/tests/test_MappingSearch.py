@@ -6,6 +6,122 @@ import libcasm.xtal as xtal
 import libcasm.xtal.prims as xtal_prims
 
 
+def test_MappingSearch_1_old():
+    # Construct the parent crystal structure
+    disp_dof = xtal.DoFSetBasis("disp")
+    Hstrain_dof = xtal.DoFSetBasis("Hstrain")
+    parent_xtal_prim = xtal_prims.HCP(
+        a=1.0,
+        occ_dof=["A"],
+        local_dof=[disp_dof],
+        global_dof=[Hstrain_dof],
+    )
+
+    search_min_cost = 0.0
+    search_max_cost = 1e20
+    search_k_best = 10
+    lattice_mapping_min_cost = 0.0
+    lattice_mapping_k_best = 100
+    lattice_mapping_reorientation_range = 3
+    cost_tol = 1e-5
+
+    # construct child as superstructure of parent
+    transformation_matrix_to_super = np.array(
+        [
+            [1, 0, 0],
+            [1, 2, 0],
+            [0, 0, 1],
+        ],
+        dtype="int",
+    )
+
+    ### ~~~~ Internal ~~~~ ###
+
+    parent_search_data = mapsearch.PrimSearchData(
+        prim=parent_xtal_prim,
+        enable_symmetry_breaking_atom_cost=False,
+    )
+    prim_structure_data = mapsearch.StructureSearchData(
+        lattice=parent_xtal_prim.lattice(),
+        atom_coordinate_cart=parent_xtal_prim.coordinate_cart(),
+        atom_type=[occ[0] for occ in parent_xtal_prim.occ_dof()],
+        override_structure_factor_group=None,
+    )
+
+    def custom_make_atom_to_site_cost(
+        # lattice: xtal.Lattice,
+        displacement: np.ndarray,
+        atom_type: str,
+        allowed_atom_types: list[str],
+        infinity: float,
+    ) -> float:
+        if atom_type in ["Va", "VA", "va"]:
+            return 0.0
+        if atom_type not in allowed_atom_types:
+            return infinity
+        return displacement @ displacement
+
+    # Create a MappingSearch object.
+    # This will hold a queue of possible mappings,
+    # sorted by cost, as we generate them.
+    search = mapsearch.MappingSearch(
+        min_cost=search_min_cost,
+        max_cost=search_max_cost,
+        k_best=search_k_best,
+        atom_cost_f=mapsearch.IsotropicAtomCost(),
+        total_cost_f=mapsearch.WeightedTotalCost(lattice_cost_weight=0.5),
+        atom_to_site_cost_f=custom_make_atom_to_site_cost,
+        enable_remove_mean_displacement=False,
+        infinity=1e20,
+        cost_tol=cost_tol,
+    )
+
+    # for each child, make lattice mapping solutions
+    child_search_data = mapsearch.make_superstructure_data(
+        prim_structure_data=prim_structure_data,
+        transformation_matrix_to_super=transformation_matrix_to_super,
+    )
+
+    lattice_mappings = mapmethods.map_lattices(
+        lattice1=parent_search_data.prim_lattice(),
+        lattice2=child_search_data.lattice(),
+        transformation_matrix_to_super=child_search_data.transformation_matrix_to_super(),
+        lattice1_point_group=parent_search_data.prim_crystal_point_group(),
+        lattice2_point_group=child_search_data.structure_crystal_point_group(),
+        min_cost=lattice_mapping_min_cost,
+        max_cost=1e20,
+        cost_method="isotropic_strain_cost",
+        k_best=lattice_mapping_k_best,
+        reorientation_range=lattice_mapping_reorientation_range,
+        cost_tol=cost_tol,
+    )
+
+    for scored_lattice_mapping in lattice_mappings:
+        lattice_mapping_data = mapsearch.LatticeMappingSearchData(
+            prim_data=parent_search_data,
+            structure_data=child_search_data,
+            lattice_mapping=scored_lattice_mapping,
+        )
+
+        # for each lattice mapping, generate possible translations
+        trial_translations = mapsearch.make_trial_translations(
+            lattice_mapping_data=lattice_mapping_data,
+        )
+
+        # for each combination of lattice mapping and translation,
+        # make and insert a mapping solution (MappingNode)
+        for trial_translation in trial_translations:
+            search.make_and_insert_mapping_node(
+                lattice_cost=scored_lattice_mapping.lattice_cost(),
+                lattice_mapping_data=lattice_mapping_data,
+                trial_translation_cart=trial_translation,
+                forced_on={},
+                forced_off=[],
+            )
+
+    assert search.size() == 27
+
+
 def test_MappingSearch_1():
     # Construct the parent crystal structure
     disp_dof = xtal.DoFSetBasis("disp")
@@ -57,7 +173,7 @@ def test_MappingSearch_1():
         k_best=search_k_best,
         atom_cost_f=mapsearch.IsotropicAtomCost(),
         total_cost_f=mapsearch.WeightedTotalCost(lattice_cost_weight=0.5),
-        atom_to_site_cost_f=mapsearch.make_atom_to_site_cost,
+        atom_to_site_cost_future_f=mapsearch.make_atom_to_site_cost_future,
         enable_remove_mean_displacement=False,
         infinity=1e20,
         cost_tol=cost_tol,

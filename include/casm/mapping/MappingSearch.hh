@@ -154,13 +154,14 @@ MappingNode make_mapping_node(
 /// \brief Performs structure mapping searches
 struct MappingSearch {
   /// \brief Constructor
-  MappingSearch(
-      double _min_cost = 0.0, double _max_cost = 1e20, int _k_best = 1,
-      AtomCostFunction _atom_cost_f = IsotropicAtomCost(),
-      TotalCostFunction _total_cost_f = WeightedTotalCost(0.5),
-      AtomToSiteCostFunction _atom_to_site_cost_f = make_atom_to_site_cost,
-      bool _enable_remove_mean_displacement = true, double _infinity = 1e20,
-      double _cost_tol = 1e-5);
+  MappingSearch(double _min_cost = 0.0, double _max_cost = 1e20,
+                int _k_best = 1,
+                AtomCostFunction _atom_cost_f = IsotropicAtomCost(),
+                TotalCostFunction _total_cost_f = WeightedTotalCost(0.5),
+                AtomToSiteCostFunction _atom_to_site_cost_f =
+                    make_atom_to_site_cost_future,
+                bool _enable_remove_mean_displacement = true,
+                double _infinity = 1e20, double _cost_tol = 1e-5);
 
   /// \brief A queue of structure mappings, sorted by total
   ///     cost only

@@ -12,6 +12,7 @@ from ._mapping_mapsearch import (
     SymmetryBreakingAtomCost,
     WeightedTotalCost,
     make_atom_to_site_cost,
+    make_atom_to_site_cost_future,
     make_superstructure_data,
     make_trial_translations,
 )

@@ -214,9 +214,25 @@ using AtomToSiteCostFunction = std::function<double(
     std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity)>;
 
+/// \brief A function, such as `make_atom_to_site_cost`,
+///     which calculates the atom-to-site mapping cost given the
+///     lattice in which the displacements are calculated under
+///     periodic boundary conditions, the site-to-atom
+///     displacement, atom_type, allowed_atom_types,
+///     and value to use for unallowed mappings (infinity).
+using DispOnlyAtomToSiteCostFunction = std::function<double(
+    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    std::vector<std::string> const &allowed_atom_types, double infinity)>;
+
 /// \brief Make the mapping cost for a particular atom
 ///     to a particular structure site
 double make_atom_to_site_cost(
+    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    std::vector<std::string> const &allowed_atom_types, double infinity);
+
+/// \brief Make the mapping cost for a particular atom
+///     to a particular structure site
+double make_atom_to_site_cost_future(
     xtal::Lattice const &lattice, Eigen::Vector3d const &displacement,
     std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity);
@@ -229,7 +245,8 @@ struct AtomMappingSearchData {
   AtomMappingSearchData(
       std::shared_ptr<LatticeMappingSearchData const> _lattice_mapping_data,
       Eigen::Vector3d const &_trial_translation_cart,
-      AtomToSiteCostFunction _atom_to_site_cost_f = make_atom_to_site_cost,
+      AtomToSiteCostFunction _atom_to_site_cost_f =
+          make_atom_to_site_cost_future,
       double _infinity = 1e20);
 
   /// \brief Holds lattice mapping-specific data used

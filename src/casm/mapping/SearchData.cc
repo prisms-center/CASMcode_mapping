@@ -652,10 +652,53 @@ std::vector<Eigen::Vector3d> make_trial_translations(
 /// \brief Make the atom mapping cost for a particular atom
 ///     to a particular structure site
 ///
+/// Note:
+/// - Deprecated in v2.3.0. Will be replaced by `atom_to_site_cost_future`,
+///   in >=v3.0.0.
+///
 /// Mapping cost:
 /// - of a vacancy (xtal::is_vacancy is used to check
 /// the atom_type) to any site that allows vacancies is set to 0.0.
 /// - to a site that does not allow the atom type is infinity
+/// - otherwise, equal to displacement length squared
+///
+/// \param displacement The minimum length displacement, accounting
+///     for periodic boundaries, from the site to the atom
+/// \param atom_type The atom type.
+/// \param allowed_atom_types The atom types allowed on the site
+/// \param infinity The value to use for unallowed mappings
+double make_atom_to_site_cost(
+    Eigen::Vector3d const &displacement, std::string const &atom_type,
+    std::vector<std::string> const &allowed_atom_types, double infinity) {
+  // if vacancy is allowed on site, return 0.0; else return infinity
+  if (xtal::is_vacancy(atom_type)) {
+    for (auto const &allowed_type : allowed_atom_types) {
+      if (xtal::is_vacancy(allowed_type)) {
+        return 0.0;
+      }
+    }
+    return infinity;
+  }
+
+  // if non-vacancy is not allowed on site, return infinity
+  auto begin = allowed_atom_types.begin();
+  auto end = allowed_atom_types.end();
+  if (std::find(begin, end, atom_type) == end) {
+    return infinity;
+  }
+
+  // otherwise, return distance squared
+  return displacement.dot(displacement);
+}
+
+/// \brief Make the atom mapping cost for a particular atom
+///     to a particular structure site
+///
+/// Mapping cost:
+/// - of a vacancy (xtal::is_vacancy is used to check
+/// the atom_type) to any site that allows vacancies is set to 0.0.
+/// - to a site that does not allow the atom type is infinity
+/// - of a displacement on the boundary of the Voronoi cell is set to infinity,
 /// - otherwise, equal to displacement length squared
 ///
 /// \param lattice Lattice in which the displacements are calculated
@@ -665,7 +708,7 @@ std::vector<Eigen::Vector3d> make_trial_translations(
 /// \param atom_type The atom type.
 /// \param allowed_atom_types The atom types allowed on the site
 /// \param infinity The value to use for unallowed mappings
-double make_atom_to_site_cost(
+double make_atom_to_site_cost_future(
     xtal::Lattice const &lattice, Eigen::Vector3d const &displacement,
     std::string const &atom_type,
     std::vector<std::string> const &allowed_atom_types, double infinity) {

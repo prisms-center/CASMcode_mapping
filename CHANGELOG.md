@@ -5,12 +5,22 @@ All notable changes to `libcasm-mapping` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0] - 2025-08-06
+## [2.3.0] - 2025-08-07
+
+### Added
+
+- Added `CASM::mapping::DispOnlyAtomToSiteCostFunction`, which has the same definition of `CASM::mapping::AtomToSiteCostFunction` previous to this release.
+- Added `libcasm.mapping.mapsearch.make_atom_to_site_cost_future`. This method makes the cost infinity for displacements that are on the boundary of the Voronio cell. This addresses an issue where the choice of displacement vector for atoms on the parent superlattice voronoi cell boundary was ambiguous and in practice sensitive to small numerical differences, leading to inconsistent mapping results. With the change, atom mappings with displacements on the Voronoi cell boundary will not be selected, and larger supercells will be necessary to find atom mappings with those assignments.
+- Added an `atom_to_site_cost_future_f` argument for the `MapSearch` and `AtomMappingSearchData` constructors to allow use of `make_atom_to_site_cost_future` instead of `make_atom_to_site_cost`.
 
 ### Changed
 
-- Changed `AtomToSiteCostFunction` to take the Lattice used to find displacements under periodic boundary conditions.
-- Changed `make_atom_to_site_cost` to make the cost infinity for displacements that are on the boundary of the Voronio cell. This addresses an issue where the choice of displacement vector for displacement vector was ambiguous and in practice sensitive to small numerical differences, leading to inconsistent mapping results. With the change, atom mappings with displacements on the Voronoi cell boundary will not be selected, and larger supercells will be necessary to find atom mappings with those assignments.
+- Changed `CASM::mapping::AtomToSiteCostFunction` to take the Lattice used to find displacements under periodic boundary conditions.
+
+### Deprecated
+
+- The `make_atom_to_site_cost_future` and `make_atom_to_site_cost` methods are marked deprecated because `make_atom_to_site_cost_future` is planned to replace `make_atom_to_site_cost` in libcasm-mapping 3.0.0.
+- The `atom_to_site_cost_f` and `atom_to_site_cost_future_f` arguments for the `MapSearch` and `AtomMappingSearchData` constructors are marked deprecated because `atom_to_site_cost_future_f` is planned to replace `atom_to_site_cost_f`  in libcasm-mapping 3.0.0.
 
 
 ## [2.2.0] - 2025-07-14
