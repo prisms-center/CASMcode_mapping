@@ -31,9 +31,8 @@ MappingSearch make_MappingSearch(
     std::optional<AtomCostFunction> _atom_cost_f,
     std::optional<TotalCostFunction> _total_cost_f,
     std::optional<DispOnlyAtomToSiteCostFunction> _atom_to_site_cost_f,
-    std::optional<AtomToSiteCostFunction> _atom_to_site_cost_future_f,
-    bool _enable_remove_mean_displacement, double _infinity, double _cost_tol) {
-  std::cout << "make_MappingSearch called" << std::endl;
+    bool _enable_remove_mean_displacement, double _infinity, double _cost_tol,
+    std::optional<AtomToSiteCostFunction> _atom_to_site_cost_future_f) {
   if (!_atom_cost_f) {
     _atom_cost_f = IsotropicAtomCost();
   }
@@ -67,8 +66,8 @@ std::shared_ptr<AtomMappingSearchData> make_AtomMappingSearchData(
     std::shared_ptr<LatticeMappingSearchData const> lattice_mapping_data,
     Eigen::Vector3d const &trial_translation_cart,
     std::optional<DispOnlyAtomToSiteCostFunction> _atom_to_site_cost_f,
-    std::optional<AtomToSiteCostFunction> _atom_to_site_cost_future_f,
-    double infinity) {
+    double infinity,
+    std::optional<AtomToSiteCostFunction> _atom_to_site_cost_future_f) {
   AtomToSiteCostFunction f;
   if (_atom_to_site_cost_future_f) {
     f = _atom_to_site_cost_future_f.value();
@@ -591,8 +590,9 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
       .def(py::init<>(&make_AtomMappingSearchData),
            py::arg("lattice_mapping_data"), py::arg("trial_translation_cart"),
            py::arg("atom_to_site_cost_f") = std::nullopt,
+           py::arg("infinity") = 1e20,
            py::arg("atom_to_site_cost_future_f") = std::nullopt,
-           py::arg("infinity") = 1e20, R"pbdoc(
+           R"pbdoc(
           .. rubric:: Constructor
 
           Parameters
@@ -621,6 +621,9 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
                   :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost_future`
                   will be used as the default.
 
+          infinity : float = 1e20
+              The value to use for the cost of unallowed mappings.
+
           atom_to_site_cost_future_f : Optional[Callable] = None
               A function used to calculate the cost of mapping an atom to a
               particular site. Expected to match the same signature as
@@ -631,8 +634,7 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
               .. deprecated:: 2.3.0
                   This argument will be removed in libcasm-mapping>=3.0.0.
 
-          infinity : float = 1e20
-              The value to use for the cost of unallowed mappings.
+
           )pbdoc")
       .def(
           "lattice_mapping_data",
@@ -1008,9 +1010,9 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
            py::arg("atom_cost_f") = std::nullopt,
            py::arg("total_cost_f") = std::nullopt,
            py::arg("atom_to_site_cost_f") = std::nullopt,
-           py::arg("atom_to_site_cost_future_f") = std::nullopt,
            py::arg("enable_remove_mean_displacement") = true,
            py::arg("infinity") = 1e20, py::arg("cost_tol") = 1e-5,
+           py::arg("atom_to_site_cost_future_f") = std::nullopt,
            R"pbdoc(
           .. rubric:: Constructor
 
@@ -1063,16 +1065,6 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
                   :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost_future`
                   will be used as the default.
 
-          atom_to_site_cost_future_f : Optional[Callable] = None
-              A function used to calculate the cost of mapping an atom to a
-              particular site. Expected to match the same signature as
-              :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost_future`.
-              If provided, this function will be used with priority over
-              `atom_to_site_cost_f`.
-
-              .. deprecated:: 2.3.0
-                  This argument will be removed in libcasm-mapping>=3.0.0.
-
           enable_remove_mean_displacement : bool = True
               If true, the translation and displacements of an atom
               mapping are adjusted consistently so that the mean displacment
@@ -1082,6 +1074,15 @@ PYBIND11_MODULE(_mapping_mapsearch, m) {
               unallowed atom-to-site mappings.
           cost_tol : float = 1e-5
               Tolerance for checking if mapping costs are approximately equal.
+          atom_to_site_cost_future_f : Optional[Callable] = None
+              A function used to calculate the cost of mapping an atom to a
+              particular site. Expected to match the same signature as
+              :func:`~libcasm.mapping.mapsearch.make_atom_to_site_cost_future`.
+              If provided, this function will be used with priority over
+              `atom_to_site_cost_f`.
+
+              .. deprecated:: 2.3.0
+                  This argument will be removed in libcasm-mapping>=3.0.0.
 
           )pbdoc")
       .def_readonly("min_cost", &MappingSearch::min_cost,
