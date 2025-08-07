@@ -97,7 +97,7 @@ TEST(MappingSearchTest, Test1) {
   AtomCostFunction atom_cost_f = IsotropicAtomCost();
   double lattice_cost_weight = 0.5;
   TotalCostFunction total_cost_f = WeightedTotalCost(lattice_cost_weight);
-  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost;
+  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost_future;
   bool enable_remove_mean_displacement = true;
   double infinity = 1e20;
   double cost_tol = 1e-5;
@@ -175,7 +175,7 @@ TEST(MappingSearchTest, Test2) {
   AtomCostFunction atom_cost_f = IsotropicAtomCost();
   double lattice_cost_weight = 0.5;
   TotalCostFunction total_cost_f = WeightedTotalCost(lattice_cost_weight);
-  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost;
+  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost_future;
   bool enable_remove_mean_displacement = true;
   double infinity = 1e20;
   double cost_tol = 1e-5;
@@ -253,7 +253,7 @@ TEST(MappingSearchTest, Test3) {
   AtomCostFunction atom_cost_f = IsotropicAtomCost();
   double lattice_cost_weight = 0.5;
   TotalCostFunction total_cost_f = WeightedTotalCost(lattice_cost_weight);
-  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost;
+  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost_future;
   bool enable_remove_mean_displacement = true;
   double infinity = 1e20;
   double cost_tol = 1e-5;
@@ -333,7 +333,7 @@ TEST(MappingSearchTest, Test4) {
   AtomCostFunction atom_cost_f = IsotropicAtomCost();
   double lattice_cost_weight = 0.5;
   TotalCostFunction total_cost_f = WeightedTotalCost(lattice_cost_weight);
-  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost;
+  AtomToSiteCostFunction atom_to_site_cost_f = make_atom_to_site_cost_future;
   bool enable_remove_mean_displacement = true;
   double infinity = 1e20;
   double cost_tol = 1e-5;
