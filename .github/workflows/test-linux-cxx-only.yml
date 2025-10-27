@@ -92,7 +92,7 @@ jobs:
 
       - name: upload test log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: libcasm-mapping-cxx-test-log
           path: build_cxx_test/Testing/Temporary/LastTest.log
