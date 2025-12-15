@@ -40,7 +40,7 @@ jobs:
 
       - name: upload libcasm-mapping-macos-latest-x86_64-dist
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: libcasm-mapping-macos-latest-x86_64-dist
           path: dist
