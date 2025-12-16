@@ -4,5 +4,5 @@ scikit-build
 cmake>=3.20
 ninja
 pybind11~=3.0
-libcasm-global>=2.2.0
-libcasm-xtal>=2.2.0
+libcasm-global>=2.3.0
+libcasm-xtal>=2.3.0

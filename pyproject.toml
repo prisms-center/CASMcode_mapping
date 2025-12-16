@@ -6,20 +6,20 @@ requires = [
     "cmake>=3.20",
     "ninja",
     "pybind11~=3.0",
-    "libcasm-global>=2.2.0",
-    "libcasm-xtal>=2.2.0",
+    "libcasm-global>=2.3.0",
+    "libcasm-xtal>=2.3.0",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "libcasm-mapping"
-version = "2.3.0"
+version = "2.4.0"
 authors = [
   { name="CASM developers", email="casm-developers@lists.engr.ucsb.edu" },
 ]
 description = "CASM structure mapping"
 readme = "README.md"
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.10,<3.15"
 license = "LGPL-2.1-or-later"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -28,8 +28,8 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-  "libcasm-global>=2.2.0",
-  "libcasm-xtal>=2.2.0",
+  "libcasm-global>=2.3.0",
+  "libcasm-xtal>=2.3.0",
   "numpy",
 ]
 
@@ -49,8 +49,8 @@ known-first-party = ["libcasm", "casm"]
 
 
 [tool.cibuildwheel]
-# Build for python3.9, 3.10, 3.11, 3.12
-build = "cp39-* cp310-* cp311-* cp312-* cp313-*"
+# Build for python3.10, 3.11, 3.12, 3.13, 3.14
+build = "cp310-* cp311-* cp312-* cp313-* cp314-*"
 
 # Need libcasm dependencies at wheel repair stage
 before-build = "pip install -r build_requirements.txt"
@@ -61,7 +61,7 @@ test-command = "pytest -rsap {project}/python/tests"
 
 [tool.cibuildwheel.macos]
 # C++17
-environment = { MACOSX_DEPLOYMENT_TARGET="10.15" }
+environment = { MACOSX_DEPLOYMENT_TARGET="11.0" }
 
 repair-wheel-command = ""
 
