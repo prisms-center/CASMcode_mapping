@@ -75,7 +75,7 @@ jobs:
 
       - name: upload docs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: libcasm-mapping-docs
           path: python/doc/_build/html
