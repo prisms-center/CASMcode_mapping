@@ -299,8 +299,10 @@ PYBIND11_MODULE(_mapping_info, m) {
        .. code-block:: Python
 
            import libcasm.xtal as xtal
+           T = lattice_mapping.transformation_matrix_to_super().astype(int)
+           N = lattice_mapping.reorientation().astype(int)
            parent_superstructure = xtal.make_superstructure(
-               T * N, parent_structure)
+               T @ N, parent_structure)
 
        where :math:`T`, and :math:`N` are from a
        :class:`~libcasm.mapping.info.LatticeMapping`. Then the i-th atom coordinate,
